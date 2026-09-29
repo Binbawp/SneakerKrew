@@ -1,0 +1,93 @@
+{% if categories %}
+<nav class="sk-catnav">
+  <div class="container">
+    <div class="sk-catnav-inner">
+      <div class="sk-catnav-item sk-all"><a href="{{ home }}"><i class="fa fa-th-large"></i>{{ text_all_items }}</a></div>
+
+      {% for category in categories %}
+      <div class="sk-catnav-item{% if category.columns %} sk-has-flyout{% endif %}">
+        <a href="{{ category.href }}">
+          {{ category.name }}
+          {% if category.columns %}<i class="fa fa-angle-down sk-catnav-caret"></i>{% endif %}
+        </a>
+
+        {% if category.columns %}
+          {% if category.has_titles %}
+          <div class="sk-flyout sk-flyout-panels">
+            <div class="sk-flyout-side">
+              {% set first_titled = true %}
+              {% for column in category.columns %}
+                {% set block = column[0] %}
+                {% if block.title %}
+                <a href="{{ block.href }}" class="sk-flyout-side-item{% if first_titled %} active{% endif %}" data-panel="flyout-{{ loop.parent.loop.index0 }}-{{ loop.index0 }}">
+                  <span>{{ block.title }}</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+                {% set first_titled = false %}
+                {% else %}
+                  {% for item in block.items %}
+                  <a href="{{ item.href }}" class="sk-flyout-side-link">{{ item.name }}</a>
+                  {% endfor %}
+                {% endif %}
+              {% endfor %}
+            </div>
+
+            <div class="sk-flyout-main">
+              {% set first_titled = true %}
+              {% for column in category.columns %}
+                {% set block = column[0] %}
+                {% if block.title %}
+                <div class="sk-flyout-panel{% if first_titled %} active{% endif %}" id="flyout-{{ loop.parent.loop.index0 }}-{{ loop.index0 }}">
+                  <ul>
+                    {% for item in block.items %}
+                    <li><a href="{{ item.href }}">{{ item.name }}</a></li>
+                    {% endfor %}
+                  </ul>
+                </div>
+                {% set first_titled = false %}
+                {% endif %}
+              {% endfor %}
+              <a href="{{ category.href }}" class="sk-flyout-all">{{ text_all }} {{ category.name }} →</a>
+            </div>
+          </div>
+          {% else %}
+          <div class="sk-flyout sk-flyout-simple">
+            <div class="sk-flyout-simple-grid">
+              {% for column in category.columns %}
+                {% set block = column[0] %}
+                {% for item in block.items %}
+                <a href="{{ item.href }}">{{ item.name }}</a>
+                {% endfor %}
+              {% endfor %}
+            </div>
+            <a href="{{ category.href }}" class="sk-flyout-all">{{ text_all }} {{ category.name }} →</a>
+          </div>
+          {% endif %}
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+
+    <button type="button" class="sk-catnav-toggle visible-xs" data-toggle="collapse" data-target=".sk-catnav-inner">
+      <i class="fa fa-bars"></i> {{ text_category }}
+    </button>
+  </div>
+</nav>
+
+<script type="text/javascript"><!--
+$('.sk-flyout-side-item, .sk-flyout-side-link').on('mouseenter', function() {
+	var $side = $(this).closest('.sk-flyout-side');
+	var $main = $side.siblings('.sk-flyout-main');
+
+	$side.find('.sk-flyout-side-item').removeClass('active');
+	$main.find('.sk-flyout-panel').removeClass('active');
+
+	if ($(this).hasClass('sk-flyout-side-item')) {
+		var panel = $(this).data('panel');
+
+		$(this).addClass('active');
+		$main.find('#' + panel).addClass('active');
+	}
+});
+//--></script>
+{% endif %}

@@ -1,0 +1,71 @@
+{{ header }}
+
+<!-- ============ HERO — promotions / discount / new drop ============ -->
+<section class="sk-hero">
+  <div class="sk-hero-grid">
+    <a href="{{ home }}" class="sk-hero-main" style="background-image:url('catalog/view/theme/default/image/promo/hero-main.jpg');">
+      <div class="sk-hero-main-content">
+        <span class="sk-hero-tag">{{ text_hero_tag }}</span>
+        <h1 class="sk-hero-title">{{ text_hero_title_1 }}<br><em>{{ text_hero_title_2 }}</em></h1>
+        <p class="sk-hero-sub">{{ text_hero_sub }}</p>
+        <span class="sk-btn sk-btn--primary">{{ text_hero_cta }} <i class="fa fa-arrow-right"></i></span>
+      </div>
+    </a>
+    <div class="sk-hero-side">
+      <a href="{{ home }}" class="sk-hero-side-card" style="background-image:url('catalog/view/theme/default/image/promo/hero-side-1.jpg');">
+        <span class="sk-hero-side-eyebrow">{{ text_promo1_eyebrow }}</span>
+        <h3 class="sk-hero-side-title">{{ text_promo1_title }}</h3>
+        <span class="sk-btn sk-btn--outline sk-btn--sm">{{ text_promo1_cta }}</span>
+      </a>
+      <a href="{{ home }}" class="sk-hero-side-card" style="background-image:url('catalog/view/theme/default/image/promo/hero-side-2.jpg');">
+        <span class="sk-hero-side-eyebrow">{{ text_promo2_eyebrow }}</span>
+        <h3 class="sk-hero-side-title">{{ text_promo2_title }}</h3>
+        <span class="sk-btn sk-btn--light sk-btn--sm">{{ text_promo2_cta }}</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PERKS STRIP ============ -->
+<div class="sk-perks">
+  <div class="container sk-perks-inner">
+    <div class="sk-perk"><i class="fa fa-truck"></i>{{ text_perk1 }}</div>
+    <div class="sk-perk"><i class="fa fa-refresh"></i>{{ text_perk2 }}</div>
+    <div class="sk-perk"><i class="fa fa-shield"></i>{{ text_perk3 }}</div>
+    <div class="sk-perk"><i class="fa fa-credit-card"></i>{{ text_perk4 }}</div>
+  </div>
+</div>
+
+<!-- ============ CATEGORY QUICK NAV ============ -->
+{% if quick_categories %}
+<section class="sk-section" style="padding-bottom:8px;">
+  <div class="container">
+    <div class="sk-section-head">
+      <h2 class="sk-section-title"><span class="sk-slash"></span>{{ text_shop_by_category }}</h2>
+    </div>
+    <div class="sk-cat-grid">
+      {% for cat in quick_categories %}
+      <a class="sk-cat-tile{% if cat.all %} sk-cat-tile--all{% endif %}" href="{{ cat.href }}">
+        <span class="sk-cat-icon"><i class="fa {{ cat.icon }}"></i></span>
+        <span>{{ cat.name }}</span>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ============ MAIN CONTENT (admin-configured modules: featured / bestseller / etc.) ============ -->
+<div id="common-home" class="container">
+  <div class="row">{{ column_left }}
+    {% if column_left and column_right %}
+    {% set class = 'col-sm-6' %}
+    {% elseif column_left or column_right %}
+    {% set class = 'col-sm-9' %}
+    {% else %}
+    {% set class = 'col-sm-12' %}
+    {% endif %}
+    <div id="content" class="{{ class }}">{{ content_top }}{{ content_bottom }}</div>
+    {{ column_right }}</div>
+</div>
+{{ footer }}

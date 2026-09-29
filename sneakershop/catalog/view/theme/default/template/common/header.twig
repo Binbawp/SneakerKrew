@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<!--[if IE 8 ]><html dir="{{ direction }}" lang="{{ lang }}" class="ie8"><![endif]-->
+<!--[if IE 9 ]><html dir="{{ direction }}" lang="{{ lang }}" class="ie9"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html dir="{{ direction }}" lang="{{ lang }}">
+<!--<![endif]-->
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>{{ title }}</title>
+<base href="{{ base }}" />
+{% if description %}
+<meta name="description" content="{{ description }}" />
+{% endif %}
+{% if keywords %}
+<meta name="keywords" content="{{ keywords }}" />
+{% endif %}
+<script src="catalog/view/javascript/jquery/jquery-3.7.1.min.js" type="text/javascript"></script>
+<link href="catalog/view/javascript/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+<script src="catalog/view/javascript/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<link href="catalog/view/javascript/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+<link href="//fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" type="text/css" />
+<link href="catalog/view/theme/default/stylesheet/stylesheet.css" rel="stylesheet">
+<link href="catalog/view/theme/default/stylesheet/custom-theme.css" rel="stylesheet">
+{% for style in styles %}
+<link href="{{ style.href }}" type="text/css" rel="{{ style.rel }}" media="{{ style.media }}" />
+{% endfor %}
+{% for script in scripts %}
+<script src="{{ script }}" type="text/javascript"></script>
+{% endfor %}
+<script src="catalog/view/javascript/common.js" type="text/javascript"></script>
+{% for link in links %}
+<link href="{{ link.href }}" rel="{{ link.rel }}" />
+{% endfor %}
+{% for analytic in analytics %}
+{{ analytic }}
+{% endfor %}
+</head>
+<body>
+
+<!-- utility bar -->
+<div class="sk-utility">
+  <div class="sk-container sk-utility-inner">
+    <div class="sk-utility-left">
+      {% if telephone %}<a href="{{ contact }}"><i class="fa fa-phone"></i>{{ telephone }}</a>{% endif %}
+    </div>
+    <div class="sk-utility-right">
+      <span class="sk-utility-currency">{{ currency }}</span>
+      <span class="sk-utility-language">{{ language }}</span>
+      <a href="{{ wishlist }}" id="wishlist-total" title="{{ text_wishlist }}"><i class="fa fa-heart-o"></i><span class="hidden-xs hidden-sm">{{ text_wishlist }}</span></a>
+      <a href="{{ checkout }}" title="{{ text_checkout }}"><i class="fa fa-share-square-o"></i><span class="hidden-xs hidden-sm">{{ text_checkout }}</span></a>
+    </div>
+  </div>
+</div>
+
+<!-- main header: logo / search / register / about us / cart -->
+<header class="sk-header">
+  <div class="sk-container sk-header-inner">
+    <div id="logo" class="sk-logo">
+      {% if logo %}
+      <a href="{{ home }}"><img src="{{ logo }}" title="{{ name }}" alt="{{ name }}" /></a>
+      {% else %}
+      <a href="{{ home }}">{{ name }}</a>
+      {% endif %}
+    </div>
+
+    <div class="sk-search">{{ search }}</div>
+
+    <div class="sk-header-actions">
+      <div class="sk-action dropdown">
+        <a href="{{ logged ? account : register }}" class="dropdown-toggle" data-toggle="dropdown">
+          <i class="fa fa-user-o"></i>{{ logged ? text_account : text_register }}
+        </a>
+        <ul class="dropdown-menu dropdown-menu-right sk-account-menu">
+          {% if logged %}
+          <li><a href="{{ account }}">{{ text_account }}</a></li>
+          <li><a href="{{ order }}">{{ text_order }}</a></li>
+          <li><a href="{{ download }}">{{ text_download }}</a></li>
+          <li><a href="{{ logout }}">{{ text_logout }}</a></li>
+          {% else %}
+          <li><a href="{{ register }}">{{ text_register }}</a></li>
+          <li><a href="{{ login }}">{{ text_login }}</a></li>
+          {% endif %}
+        </ul>
+      </div>
+
+      <a class="sk-action" href="{{ about }}"><i class="fa fa-info-circle"></i>{{ text_about_us }}</a>
+
+      {{ cart }}
+    </div>
+  </div>
+</header>
+
+{{ menu }}

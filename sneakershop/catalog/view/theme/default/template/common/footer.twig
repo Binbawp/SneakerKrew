@@ -1,0 +1,72 @@
+<footer class="sk-footer">
+  <div class="container sk-footer-top">
+    <div class="sk-footer-grid">
+      <div>
+        <div class="sk-footer-logo">{{ store_name }}</div>
+        <p>{{ text_about_blurb }}</p>
+        <div class="sk-social">
+          <a href="https://www.facebook.com/dengkhuoo" target="_blank"><i class="fa fa-facebook"></i></a>
+          <a href="https://www.instagram.com/imbatman_idontkill/" target="_blank"><i class="fa fa-instagram"></i></a>
+          <a href="https://www.tiktok.com/@binbawp?lang=en" target="_blank" class="sk-social-tiktok" aria-label="TikTok">
+            <svg viewBox="0 0 448 512" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0h80a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      {% if informations %}
+      <div>
+        <h6>{{ text_information }}</h6>
+        <ul>
+          {% for information in informations %}
+          <li><a href="{{ information.href }}">{{ information.title }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+
+      <div>
+        <h6>{{ text_service }}</h6>
+        <ul>
+          <li><a href="{{ contact }}">{{ text_contact }}</a></li>
+          <li><a href="{{ return }}">{{ text_return }}</a></li>
+          <li><a href="{{ tracking }}">{{ text_tracking }}</a></li>
+          <li><a href="{{ special }}">{{ text_special }}</a></li>
+          <li><a href="{{ sitemap }}">{{ text_sitemap }}</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h6>{{ text_contact_heading }}</h6>
+        <ul class="sk-footer-contact">
+          {% if store_address %}<li><i class="fa fa-map-marker"></i>{{ store_address }}</li>{% endif %}
+          {% if store_telephone %}<li><i class="fa fa-phone"></i>{{ store_telephone }}</li>{% endif %}
+          {% if store_email %}<li><i class="fa fa-envelope-o"></i>{{ store_email }}</li>{% endif %}
+        </ul>
+        <h6 style="margin-top:20px;">{{ text_newsletter }}</h6>
+        <form class="sk-newsletter" action="{{ newsletter }}" method="get">
+          <input type="email" name="email" placeholder="{{ text_email_placeholder }}" />
+          <button type="submit"><i class="fa fa-paper-plane"></i></button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="container sk-footer-bottom">
+    <span>{{ powered }}</span>
+    <div class="sk-payments">
+      <i class="fa fa-cc-visa"></i><i class="fa fa-cc-mastercard"></i><i class="fa fa-cc-paypal"></i><i class="fa fa-money"></i>
+    </div>
+  </div>
+</footer>
+
+{% for style in styles %}
+<link href="{{ style.href }}" type="text/css" rel="{{ style.rel }}" media="{{ style.media }}" />
+{% endfor %}
+{% for script in scripts %}
+<script src="{{ script }}" type="text/javascript"></script>
+{% endfor %}
+<!--
+OpenCart is open source software and you are free to remove the powered by OpenCart if you want, but its generally accepted practise to make a small donation.
+Please donate via PayPal to donate@opencart.com
+//-->
+</body></html>

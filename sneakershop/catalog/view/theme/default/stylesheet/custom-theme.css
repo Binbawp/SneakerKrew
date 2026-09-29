@@ -1,0 +1,1036 @@
+/* =========================================================================
+   SNEAKERSHOP — storefront theme
+   A streetwear/sneaker-culture design system layered on top of OpenCart's
+   default Bootstrap 3 markup. Namespaced with `sk-` to avoid collisions.
+   ========================================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root{
+  /* --- palette -------------------------------------------------------- */
+  --sk-ink:        #14161A;   /* graphite - header/footer surfaces */
+  --sk-ink-soft:   #23262D;   /* raised dark surface */
+  --sk-ink-line:   #34383F;   /* hairlines on dark */
+  --sk-paper:      #F6F5F2;   /* page background, cool off-white */
+  --sk-paper-alt:  #EDEBE5;   /* secondary light surface */
+  --sk-white:      #FFFFFF;
+  --sk-line:       #E2DFD8;   /* hairlines on light */
+  --sk-text:       #16181C;
+  --sk-muted:      #6B6E74;
+
+  --sk-blaze:      #FF4419;   /* signature CTA / brand accent */
+  --sk-blaze-dark: #DC3711;
+  --sk-volt:       #D8FF3E;   /* accent lime for "new drop" tags, sparingly */
+  --sk-sale:       #E1272D;   /* discount red */
+
+  --sk-radius:     2px;
+  --sk-radius-lg:  4px;
+  --sk-shadow:     0 12px 28px rgba(20,22,26,.10);
+
+  --sk-display:    'Anton', 'Arial Narrow', sans-serif;
+  --sk-body:       'Inter', -apple-system, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* =========================================================================
+   Base
+   ========================================================================= */
+body{
+  font-family: var(--sk-body);
+  color: var(--sk-text);
+  background: var(--sk-paper);
+}
+a{ color: inherit; text-decoration:none; }
+a:hover, a:focus{ text-decoration:none; }
+
+/* Sitewide focus outline — nothing in the theme styled :focus, so every
+   link/button/input fell back to the browser default (a heavy black box
+   in Chrome/Edge) that stays on screen after any click. Suppress it for
+   mouse clicks but keep a themed ring for keyboard/tab navigation, so the
+   site still meets accessibility expectations for keyboard users. */
+a:focus,
+button:focus,
+.btn:focus,
+input:focus,
+select:focus,
+textarea:focus{ outline: none; }
+
+/* Bootstrap's own .btn.active:focus / .btn:active.focus rules are more
+   specific than the generic .btn:focus above, so once a button (like the
+   list/grid view toggle) picks up the "active" class, Bootstrap's chunky
+   default outline came back. Match its selector list exactly to cancel it. */
+.btn:focus,
+.btn:active:focus,
+.btn.active:focus,
+.btn.focus,
+.btn:active.focus,
+.btn.active.focus{ outline: none; }
+
+a:focus-visible,
+button:focus-visible,
+.btn:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible{
+  outline: 2px solid var(--sk-blaze);
+  outline-offset: 2px;
+}
+.sk-container{
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+.sk-eyebrow{
+  font-family: var(--sk-body);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--sk-blaze);
+}
+.sk-slash{
+  display:inline-block;
+  width: 14px; height: 3px;
+  background: var(--sk-blaze);
+  transform: skewX(-20deg);
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+/* =========================================================================
+   Utility bar (top strip: contact / account / cart)
+   ========================================================================= */
+.sk-utility{
+  background: var(--sk-ink);
+  color: #C7C9CD;
+  font-size: 12px;
+  position: relative;
+  z-index: 1010; /* keep utility-bar dropdowns (currency/language) above the sticky .sk-header (z-index:1000) */
+}
+.sk-utility .sk-container{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  height: 36px;
+}
+.sk-utility a{ color:#C7C9CD; }
+.sk-utility a:hover{ color: var(--sk-white); }
+.sk-utility-left{ display:flex; gap:20px; align-items:center; }
+.sk-utility-left span i{ color: var(--sk-blaze); margin-right:6px; }
+.sk-utility-right{ display:flex; gap:18px; align-items:center; }
+.sk-utility-right .sk-divider{ color: var(--sk-ink-line); }
+
+/* =========================================================================
+   Header
+   ========================================================================= */
+.sk-header{
+  background: var(--sk-white);
+  border-bottom: 1px solid var(--sk-line);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+.sk-header-inner{
+  display:flex;
+  align-items:center;
+  gap: 28px;
+  height: 84px;
+}
+.sk-logo{
+  font-family: var(--sk-display);
+  font-size: 30px;
+  letter-spacing: .01em;
+  line-height:1;
+  white-space: nowrap;
+}
+.sk-logo span{ color: var(--sk-blaze); }
+.sk-logo img{ max-height: 46px; display:block; }
+
+.sk-search{ flex: 1 1 auto; }
+.sk-search form{ position:relative; }
+.sk-search input{
+  width:100%;
+  height: 46px;
+  border: 2px solid var(--sk-ink);
+  border-radius: var(--sk-radius);
+  padding: 0 52px 0 16px;
+  font-size: 14px;
+  background: var(--sk-paper);
+}
+.sk-search input:focus{ outline:none; border-color: var(--sk-blaze); background:var(--sk-white); }
+.sk-search button{
+  position:absolute; right:0; top:0; bottom:0;
+  width: 46px;
+  background: var(--sk-ink);
+  border:none; color:var(--sk-white);
+  border-radius: 0 var(--sk-radius) var(--sk-radius) 0;
+  border-color: var(--sk-ink);
+  text-shadow: none;
+  transition: background-color 0.15s ease;
+}
+.sk-search button:hover{ background: var(--sk-blaze); }
+
+.sk-header-actions{ display:flex; align-items:center; gap: 26px; flex: 0 0 auto; }
+.sk-action{ text-align:center; font-size: 11px; font-weight:600; text-transform:uppercase; letter-spacing:.04em; color: var(--sk-text); position:relative; }
+.sk-action i{ display:block; font-size: 19px; margin: 0 auto 4px; }
+.sk-action:hover{ color: var(--sk-blaze); }
+.sk-action .sk-count{
+  position:absolute; top:-6px; right:-10px;
+  background: var(--sk-blaze); color:#fff;
+  font-size: 10px; font-weight:700;
+  width:16px; height:16px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+}
+.sk-header-burger{ display:none; }
+
+/* =========================================================================
+   Category nav bar
+   ========================================================================= */
+.sk-catnav{
+  background: var(--sk-ink);
+}
+.sk-catnav-inner{
+  display:flex;
+  align-items:stretch;
+}
+@media (max-width: 991px){
+  .sk-catnav-inner{
+    overflow-x:auto;
+    overflow-y:hidden;
+    scrollbar-width:none;
+  }
+  .sk-catnav-inner::-webkit-scrollbar{ display:none; }
+}
+.sk-catnav-item{ position:relative; flex: 0 0 auto; }
+.sk-catnav-item > a{
+  display:block;
+  padding: 13px 16px;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: #D9DADD;
+  white-space:nowrap;
+  border-bottom: 2px solid transparent;
+}
+.sk-catnav-item.sk-all > a{ color: var(--sk-blaze); }
+.sk-catnav-item > a:hover,
+.sk-catnav-item.active > a{
+  color: var(--sk-white);
+  border-bottom-color: var(--sk-blaze);
+}
+.sk-catnav-item .fa{ margin-right:7px; color:var(--sk-blaze); font-size:13px; }
+.sk-catnav-item .sk-catnav-caret{
+  margin: 0 0 0 6px;
+  font-size: 10px;
+  color: #7B7E85;
+  display: inline-block;
+  transition: transform .15s ease, color .15s ease;
+}
+.sk-catnav-item:hover .sk-catnav-caret,
+.sk-catnav-item.active .sk-catnav-caret{
+  color: var(--sk-white);
+  transform: rotate(180deg);
+}
+
+/* dropdown flyout for categories with children (desktop) */
+.sk-catnav-item .sk-flyout{
+  display:flex;
+  position:absolute; left:0; top:100%;
+  background: var(--sk-white);
+  box-shadow: var(--sk-shadow);
+  border-top: 3px solid var(--sk-blaze);
+  z-index: 1100;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  pointer-events: none;
+  transition: opacity .2s ease, transform .2s ease, visibility .2s ease;
+}
+.sk-catnav-item:hover .sk-flyout{
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* the right-most nav item's dropdown would otherwise overflow past the
+   edge of the page — open it leftward instead, flush with the item's
+   right edge, rather than its left edge */
+.sk-catnav-item:last-child .sk-flyout{
+  left: auto;
+  right: 0;
+}
+
+/* --- panels variant: left sidebar of titled blocks + right content panel --- */
+.sk-flyout-panels{ width: 680px; }
+
+.sk-flyout-side{
+  flex: 0 0 220px;
+  background: var(--sk-paper);
+  border-right: 1px solid var(--sk-line);
+  padding: 12px 0;
+}
+.sk-flyout-side-item,
+.sk-flyout-side-link{
+  display:block;
+  padding: 11px 22px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--sk-text);
+  border-left: 3px solid transparent;
+}
+.sk-flyout-side-item{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.sk-flyout-side-item span{ overflow:hidden; text-overflow:ellipsis; }
+.sk-flyout-side-item .fa{ font-size:11px; color: var(--sk-muted); }
+.sk-flyout-side-item:hover,
+.sk-flyout-side-item.active,
+.sk-flyout-side-link:hover{
+  background: var(--sk-white);
+  border-left-color: var(--sk-blaze);
+  color: var(--sk-blaze);
+}
+.sk-flyout-side-item:hover .fa,
+.sk-flyout-side-item.active .fa{ color: var(--sk-blaze); }
+
+.sk-flyout-main{
+  flex: 1 1 auto;
+  position: relative;
+  padding: 22px 26px 52px;
+  min-height: 220px;
+}
+.sk-flyout-panel{ display:none; }
+.sk-flyout-panel.active{ display:block; }
+.sk-flyout-panel ul{
+  list-style:none; margin:0; padding:0;
+  display:grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2px 24px;
+}
+.sk-flyout-panel a{
+  display:flex; align-items:center;
+  padding: 7px 0;
+  font-size: 13px;
+  color: var(--sk-muted);
+}
+.sk-flyout-panel a::before{
+  content:'';
+  width:5px; height:5px; flex: 0 0 auto;
+  margin-right:10px;
+  border-radius:50%;
+  background: var(--sk-line);
+}
+.sk-flyout-panel a:hover{ color: var(--sk-blaze); }
+.sk-flyout-panel a:hover::before{ background: var(--sk-blaze); }
+
+/* --- simple variant: flat grid of links, no titled blocks to branch on --- */
+.sk-flyout-simple{ width: 520px; padding: 22px 26px 52px; position:relative; }
+.sk-flyout-simple-grid{
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px 24px;
+}
+.sk-flyout-simple-grid a{ font-size: 13px; color: var(--sk-muted); padding: 6px 0; }
+.sk-flyout-simple-grid a:hover{ color: var(--sk-blaze); }
+
+.sk-flyout-all{
+  position: absolute;
+  right: 26px; bottom: 18px;
+  font-size:12px; font-weight:700; text-transform:uppercase;
+  color:var(--sk-blaze); white-space:nowrap;
+}
+
+/* =========================================================================
+   Hero — promotions / discount / new drop
+   ========================================================================= */
+.sk-hero{
+  position:relative;
+  background: var(--sk-ink);
+  overflow:hidden;
+}
+.sk-hero-grid{
+  display:grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 2px;
+}
+.sk-hero-main{
+  position:relative;
+  min-height: 460px;
+  display:flex; align-items:flex-end;
+  padding: 44px;
+  background-size: cover;
+  background-position:center;
+  clip-path: polygon(0 0, 100% 0, 100% 92%, 0% 100%);
+}
+.sk-hero-main::before{
+  content:"";
+  position:absolute; inset:0;
+  background: linear-gradient(0deg, rgba(10,10,10,.86) 0%, rgba(10,10,10,.15) 60%);
+}
+.sk-hero-main-content{ position:relative; z-index:1; color:#fff; max-width:560px; }
+.sk-hero-tag{
+  display:inline-block;
+  background: var(--sk-blaze);
+  color:#fff;
+  font-size: 11px; font-weight:700; letter-spacing:.12em;
+  text-transform:uppercase;
+  padding: 5px 12px;
+  margin-bottom: 16px;
+  transform: skewX(-8deg);
+}
+.sk-hero-title{
+  font-family: var(--sk-display);
+  font-size: 56px;
+  line-height: .96;
+  text-transform: uppercase;
+  margin: 0 0 14px;
+  color: #fff;
+}
+.sk-hero-title em{ font-style:normal; color: var(--sk-volt); }
+.sk-hero-sub{ font-size:15px; color:#D6D6D6; margin-bottom:22px; max-width:420px; }
+
+.sk-hero-side{ display:flex; flex-direction:column; gap:2px; }
+.sk-hero-side-card{
+  position:relative;
+  flex:1;
+  min-height: 229px;
+  padding: 26px;
+  display:flex; flex-direction:column; justify-content:flex-end;
+  background-size:cover; background-position:center;
+}
+.sk-hero-side-card::before{
+  content:"";
+  position:absolute; inset:0;
+  background: linear-gradient(0deg, rgba(10,10,10,.82) 10%, rgba(10,10,10,.05) 75%);
+}
+.sk-hero-side-card > *{ position:relative; z-index:1; }
+.sk-hero-side-eyebrow{ color: var(--sk-volt); font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; margin-bottom:6px; }
+.sk-hero-side-title{ font-family:var(--sk-display); font-size:24px; color:#fff; text-transform:uppercase; line-height:1.05; margin-bottom:10px; }
+
+/* buttons */
+.sk-btn{
+  display:inline-flex; align-items:center; gap:8px;
+  font-family: var(--sk-body);
+  font-weight: 700;
+  font-size: 12.5px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: 13px 24px;
+  border-radius: var(--sk-radius);
+  border: 2px solid transparent;
+  position: relative;
+  overflow: hidden;
+  transition: transform .15s ease;
+}
+.sk-btn:active{ transform: translateY(1px); }
+.sk-btn--primary{ background: var(--sk-blaze); color:#fff; }
+.sk-btn--primary:hover{ background: var(--sk-blaze-dark); color:#fff; }
+.sk-btn--light{ background:#fff; color: var(--sk-ink); }
+.sk-btn--light:hover{ background: var(--sk-volt); }
+.sk-btn--outline{ border-color: currentColor; background:transparent; color:#fff; }
+.sk-btn--outline:hover{ background:#fff; color:var(--sk-ink); }
+.sk-btn--sm{ padding: 9px 16px; font-size:11px; }
+
+/* =========================================================================
+   Promo strip (3 value props under hero, like reference sites)
+   ========================================================================= */
+.sk-perks{
+  background: var(--sk-white);
+  border-bottom: 1px solid var(--sk-line);
+}
+.sk-perks-inner{
+  display:flex;
+  justify-content:space-between;
+  padding: 18px 0;
+  flex-wrap:wrap;
+  gap: 14px;
+}
+.sk-perk{ display:flex; align-items:center; gap:10px; font-size:12.5px; font-weight:600; color:var(--sk-text); }
+.sk-perk i{ color: var(--sk-blaze); font-size:18px; }
+
+/* =========================================================================
+   Category quick-nav grid
+   ========================================================================= */
+.sk-section{ padding: 52px 0; }
+.sk-section-head{
+  display:flex; align-items:flex-end; justify-content:space-between;
+  margin-bottom: 26px;
+}
+.sk-section-title{
+  font-family: var(--sk-display);
+  font-size: 30px;
+  text-transform: uppercase;
+  letter-spacing:.01em;
+  display:flex; align-items:center;
+  margin:0;
+  color: var(--sk-text);
+}
+.sk-section-link{
+  font-size: 12px; font-weight:700; text-transform:uppercase; letter-spacing:.05em;
+  color: var(--sk-muted);
+  border-bottom: 1px solid var(--sk-line);
+  padding-bottom:2px;
+}
+.sk-section-link:hover{ color: var(--sk-blaze); border-color: var(--sk-blaze); }
+
+.sk-cat-grid{
+  display:grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 14px;
+}
+.sk-cat-tile{
+  display:flex; flex-direction:column; align-items:center; gap:10px;
+  text-align:center;
+  padding: 18px 6px;
+  background: var(--sk-white);
+  border: 1px solid var(--sk-line);
+  border-radius: var(--sk-radius-lg);
+  transition: border-color .15s ease, transform .15s ease;
+}
+.sk-cat-tile:hover{ border-color: var(--sk-ink); transform: translateY(-3px); }
+.sk-cat-tile .sk-cat-icon{
+  width: 52px; height:52px;
+  border-radius:50%;
+  background: var(--sk-paper-alt);
+  display:flex; align-items:center; justify-content:center;
+  font-size: 20px;
+  color: var(--sk-ink);
+}
+.sk-cat-tile.sk-cat-tile--all .sk-cat-icon{ background: var(--sk-ink); color:#fff; }
+.sk-cat-tile span{ font-size: 11px; font-weight:700; text-transform:uppercase; letter-spacing:.03em; color:var(--sk-text); }
+
+/* =========================================================================
+   Product cards — used by featured / bestseller / latest / special modules
+   ========================================================================= */
+.sk-product-row{ display:grid; grid-template-columns: repeat(5, 1fr); gap: 18px; }
+
+.product-layout .product-thumb,
+.sk-product-card{
+  background: var(--sk-white);
+  border: 1px solid var(--sk-line);
+  border-radius: var(--sk-radius-lg);
+  overflow: hidden;
+  transition: box-shadow .18s ease, transform .18s ease;
+  position: relative;
+  height:100%;
+}
+.product-layout .product-thumb:hover,
+.sk-product-card:hover{
+  box-shadow: var(--sk-shadow);
+  transform: translateY(-3px);
+  z-index: 2;
+}
+.product-thumb .image,
+.sk-product-card .sk-product-image{
+  position:relative;
+  aspect-ratio: 1 / 1;
+  background: var(--sk-paper-alt);
+  overflow:hidden;
+}
+.product-thumb .image img,
+.sk-product-card .sk-product-image img{
+  width:100%; height:100%; object-fit:cover;
+  transition: transform .35s ease;
+}
+.product-thumb:hover .image img,
+.sk-product-card:hover .sk-product-image img{ transform: scale(1.06); }
+
+.sk-badge{
+  position:absolute; top:10px; left:10px;
+  font-size: 10.5px; font-weight:800; letter-spacing:.05em; text-transform:uppercase;
+  padding: 4px 9px;
+  border-radius: 2px;
+  z-index: 2;
+}
+.sk-badge--new{ background: var(--sk-volt); color: var(--sk-ink); }
+.sk-badge--sale{ background: var(--sk-sale); color:#fff; top:38px; }
+
+.product-thumb .caption,
+.sk-product-card .sk-product-caption{ padding: 14px 14px 16px; }
+.product-thumb .caption h4,
+.sk-product-card .sk-product-name{
+  font-size: 13.5px;
+  font-weight:600;
+  line-height:1.35;
+  margin: 0 0 6px;
+  min-height: 36px;
+  overflow:hidden;
+}
+.product-thumb .caption h4 a,
+.sk-product-card .sk-product-name a{ color: var(--sk-text); }
+.product-thumb .caption h4 a:hover,
+.sk-product-card .sk-product-name a:hover{ color: var(--sk-blaze); }
+.product-thumb .caption p:not(.price){ display:none; } /* hide long descriptions on cards, but keep the price visible */
+.product-thumb .rating{ margin-bottom:6px; }
+
+.product-thumb .price,
+.sk-product-price{
+  font-family: var(--sk-body);
+  font-weight: 800;
+  font-size: 15px;
+  color: var(--sk-text);
+}
+.price-new{ color: var(--sk-sale); margin-right:8px; }
+.price-old{ color: var(--sk-muted); text-decoration: line-through; font-weight:500; font-size:12.5px; }
+
+.product-thumb .button-group{
+  display:flex; border-top: 1px solid var(--sk-line);
+}
+.product-thumb .button-group button{
+  flex:1;
+  border:none; background: var(--sk-white);
+  padding: 10px 0;
+  font-size:12px; font-weight:700; text-transform:uppercase;
+  color: var(--sk-ink);
+  border-right: 1px solid var(--sk-line);
+}
+.product-thumb .button-group button:last-child{ border-right:none; }
+.product-thumb .button-group button:first-child{ flex: 1.6; background: var(--sk-ink); color:#fff; }
+.product-thumb .button-group button:first-child:hover{ background: var(--sk-blaze); }
+.product-thumb .button-group button:hover{ background: var(--sk-paper-alt); }
+
+/* ---------------------------------------------------------------------
+   List view (product/category?...&view=list, wishlist, search results):
+   the rules above were written for the grid card layout and rely on the
+   base theme's ".product-thumb .caption{ min-height:180px }" to line
+   cards up. That min-height has no purpose in list view (one product per
+   row, nothing to line up against) but nothing was resetting it there,
+   so the button bar ended up pushed down by an arbitrary, inconsistent
+   gap. This switches list rows to flexbox: image and content column
+   stretch to match each other, and the button bar is pinned to the
+   bottom of whatever content is actually present.
+   --------------------------------------------------------------------- */
+@media (min-width: 768px) {
+  .product-list .product-thumb{
+    display: flex;
+    align-items: stretch;
+    height: auto; /* the grid rule's height:100% doesn't apply to a single-column row */
+  }
+  .product-list .product-thumb .image{
+    float: none; /* flex handles positioning now, instead of the old float layout */
+    flex: 0 0 230px;
+    height: 230px;
+    align-self: center;
+    padding: 0; /* stylesheet.css sets "padding: 0 15px" here, which showed as a grey
+                   margin around the photo since .image has a background color; the
+                   image fills the box via object-fit:cover so no padding is needed */
+  }
+  .product-list .product-thumb .caption{
+    min-height: 0; /* remove the grid-only forced height */
+    margin-left: 0; /* flex spacing replaces the old float-clearing margin */
+    flex: 1;
+  }
+  .product-list .product-thumb > div{
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0; /* keep long titles from overflowing the flex row */
+  }
+  .product-list .product-thumb .button-group{
+    margin-top: auto; /* always sits flush under the content, whatever its height */
+    border-left: 1px solid var(--sk-line);
+  }
+}
+
+.sk-module{ padding: 36px 0; border-top: 1px solid var(--sk-line); }
+.sk-module:first-of-type{ border-top: none; }
+.sk-module-row .product-layout{ margin-bottom: 24px; }
+
+
+.sk-footer{ background: var(--sk-ink); color: #B7B9BE; }
+.sk-footer-top{ padding: 56px 0 36px; }
+.sk-footer-grid{
+  display:grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1.3fr;
+  gap: 40px;
+}
+.sk-footer-logo{
+  font-family: var(--sk-display);
+  font-size: 26px; color:#fff; text-transform:uppercase; margin-bottom:14px;
+}
+.sk-footer-logo span{ color: var(--sk-blaze); }
+.sk-footer p{ font-size: 13px; line-height:1.7; color:#9A9DA3; }
+.sk-footer h6{
+  color:#fff; font-size:12.5px; font-weight:700; text-transform:uppercase; letter-spacing:.07em;
+  margin-bottom: 18px;
+}
+.sk-footer ul{ list-style:none; padding:0; margin:0; }
+.sk-footer li{ margin-bottom: 10px; }
+.sk-footer a{ font-size: 13px; color:#B7B9BE; }
+.sk-footer a:hover{ color: var(--sk-blaze); }
+.sk-footer-contact li{ display:flex; gap:10px; align-items:flex-start; font-size:13px; }
+.sk-footer-contact i{ color: var(--sk-blaze); margin-top:3px; width:14px; }
+.sk-social{ display:flex; gap:10px; margin-top:18px; }
+.sk-social a{
+  width:34px; height:34px; border-radius:50%;
+  border:1px solid var(--sk-ink-line);
+  display:flex; align-items:center; justify-content:center;
+  color:#fff;
+  position:relative;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+.sk-social a i,
+.sk-social a svg{
+  position:relative;
+  z-index:1;
+  color:#fff;
+}
+.sk-social a:hover{ background: var(--sk-blaze); border-color: var(--sk-blaze); }
+.sk-social a:hover i,
+.sk-social a:hover svg{ color:#fff; }
+
+.sk-newsletter{ display:flex; margin-top:6px; }
+.sk-newsletter input{
+  flex:1; height:44px; border:1px solid var(--sk-ink-line); background: var(--sk-ink-soft);
+  color:#fff; padding:0 14px; font-size:13px; border-radius: var(--sk-radius) 0 0 var(--sk-radius);
+}
+.sk-newsletter input::placeholder{ color:#7D8087; }
+.sk-newsletter button{
+  border:none; background: var(--sk-blaze); color:#fff; padding:0 18px;
+  border-radius: 0 var(--sk-radius) var(--sk-radius) 0; font-weight:700;
+}
+
+.sk-footer-bottom{
+  border-top: 1px solid var(--sk-ink-line);
+  padding: 18px 0;
+  display:flex; justify-content:space-between; align-items:center;
+  font-size: 12px; color:#7D8087;
+  flex-wrap:wrap; gap:10px;
+}
+.sk-payments{ display:flex; gap:8px; align-items:center; }
+.sk-payments i{ font-size:22px; color:#7D8087; }
+
+/* =========================================================================
+   OpenCart integration bridge
+   Real header/menu/cart/search partials keep their original markup (needed
+   for common.js AJAX hooks) — these rules adapt them to the new look
+   instead of rewriting their internal structure.
+   ========================================================================= */
+.sk-utility-inner{
+  display:flex; align-items:center; justify-content:space-between;
+  height: 36px;
+}
+.sk-utility-left a{ color:#C7C9CD; font-size:12px; }
+.sk-utility-left a i{ color: var(--sk-blaze); margin-right:6px; }
+.sk-utility-right{ display:flex; align-items:center; gap:16px; }
+.sk-utility-right a{ color:#C7C9CD; font-size:12px; }
+.sk-utility-right a:hover{ color:#fff; }
+.sk-utility-right a i{ margin-right:5px; }
+.sk-utility-currency .btn-group,
+.sk-utility-language .btn-group{ display:inline-block; }
+.sk-utility-currency > .dropdown-toggle,
+.sk-utility-language > .dropdown-toggle,
+.sk-utility-currency .btn-group > .dropdown-toggle,
+.sk-utility-language .btn-group > .dropdown-toggle{
+  background:transparent; border:none; color:#C7C9CD; font-size:12px; padding:0;
+}
+.sk-utility-currency .dropdown-menu,
+.sk-utility-language .dropdown-menu{
+  min-width: 160px;
+  margin-top: 14px;
+  z-index: 1010; /* match .sk-utility so the open list always renders above .sk-header */
+}
+.sk-utility-currency .dropdown-menu .btn,
+.sk-utility-language .dropdown-menu .btn{
+  color: var(--sk-text);
+  text-align: left;
+  font-size: 13px;
+  padding: 8px 16px;
+}
+.sk-utility-currency .dropdown-menu .btn:hover,
+.sk-utility-language .dropdown-menu .btn:hover{
+  background: var(--sk-paper-alt);
+  color: var(--sk-blaze);
+}
+
+.sk-header-actions{ display:flex; align-items:center; gap:26px; }
+.sk-action{
+  text-align:center; font-size:11px; font-weight:700; text-transform:uppercase;
+  letter-spacing:.04em; color: var(--sk-text); white-space:nowrap;
+}
+.sk-action i{ display:block; font-size:19px; margin:0 auto 4px; }
+.sk-action:hover{ color: var(--sk-blaze); }
+/* "My Account" wraps its link in a .sk-action div (for the dropdown),
+   unlike "About Us" where .sk-action sits directly on the <a>. Set the
+   link's own color explicitly rather than relying on it inheriting from
+   the div, so it can't fall back to the browser's default blue/underline. */
+.sk-action > a,
+.sk-action .dropdown-toggle{
+  color: inherit;
+  text-decoration: none;
+}
+.sk-action:hover > a,
+.sk-action:hover .dropdown-toggle,
+.sk-action .dropdown-toggle:hover{
+  color: var(--sk-blaze);
+}
+.sk-account-menu{ margin-top:14px; border-radius:var(--sk-radius); }
+.sk-account-menu > li > a{ font-size:13px; padding:8px 16px; }
+.sk-account-menu > li > a:hover,
+.sk-account-menu > li > a:focus{
+  color:#fff;
+  background: var(--sk-blaze);
+  background-image: none;
+}
+
+/* Smooth open/close for every Bootstrap-driven dropdown (account, cart,
+   currency, language). Bootstrap only ever toggles display:none/block
+   via the .open class it adds to the parent, and display can't be
+   transitioned — so opacity/transform drive the animation instead.
+   visibility keeps the closed menu out of the way (unclickable,
+   untabbable) without an abrupt cut, since it flips to hidden only
+   once the fade-out finishes. */
+.dropdown-menu{
+  display: block;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  pointer-events: none;
+  transition: opacity .2s ease, transform .2s ease, visibility .2s ease;
+}
+.open > .dropdown-menu{
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* #cart / #search keep OpenCart's structure; just restyle them */
+.sk-header-inner #search{ width:100%; }
+.sk-header-inner #search input{
+  height:46px; border:2px solid var(--sk-ink); border-right:none;
+  border-radius: var(--sk-radius) 0 0 var(--sk-radius); box-shadow:none;
+  font-size:14px; background: var(--sk-paper);
+}
+.sk-header-inner #search input:focus{ border-color: var(--sk-blaze); background:#fff; }
+.sk-header-inner #search .btn{
+  height:46px; background: var(--sk-ink); border:2px solid var(--sk-ink);
+  border-radius: 0 var(--sk-radius) var(--sk-radius) 0; color:#fff;
+}
+.sk-header-inner #search .btn:hover{ background: var(--sk-blaze); border-color: var(--sk-blaze); }
+
+.sk-header-inner #cart{ flex:0 0 auto; width:auto; }
+.sk-header-inner #cart > button{
+  background: var(--sk-ink); border:none; border-radius: var(--sk-radius);
+  padding: 12px 18px; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.04em;
+  box-shadow:none;
+  transition: background-color 0.15s ease;
+}
+.sk-header-inner #cart > button:hover,
+.sk-header-inner #cart > button:focus{ background: var(--sk-blaze); }
+.sk-header-inner #cart .dropdown-menu{ margin-top:14px; }
+
+
+@media (max-width: 1100px){
+  .sk-cat-grid{ grid-template-columns: repeat(5, 1fr); }
+  .sk-product-row{ grid-template-columns: repeat(3, 1fr); }
+  .sk-footer-grid{ grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 991px){
+  .sk-hero-grid{ grid-template-columns: 1fr; }
+  .sk-hero-main{ clip-path:none; min-height:360px; }
+}
+@media (max-width: 767px){
+  .sk-utility-left span:not(:first-child){ display:none; }
+  .sk-header-inner{ height:auto; padding:14px 0; flex-wrap:wrap; gap:12px; }
+  .sk-search{ order:3; flex:0 0 100%; }
+  .sk-header-actions{ margin-left:auto; gap:18px; }
+  .sk-cat-grid{ grid-template-columns: repeat(3, 1fr); }
+  .sk-product-row{ grid-template-columns: repeat(2, 1fr); }
+  .sk-hero-title{ font-size:38px; }
+  .sk-footer-grid{ grid-template-columns: 1fr; gap:30px; }
+  .sk-section{ padding:36px 0; }
+  .sk-section-title{ font-size:22px; }
+}
+
+
+/* Quantity stepper */
+.qty-stepper {
+  display: inline-flex;
+  align-items: center;
+  background: var(--sk-paper-alt);
+  border-radius: 999px;
+  padding: 4px;
+  width: fit-content;
+}
+.qty-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--sk-text);
+  cursor: pointer;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease;
+}
+.qty-btn:hover { background: rgba(20, 22, 26, 0.08); }
+.qty-btn:active { background: rgba(20, 22, 26, 0.14); }
+.qty-input {
+  width: 48px;
+  text-align: center;
+  border: none;
+  background: transparent;
+  font-family: var(--sk-body);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--sk-text);
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+.qty-input::-webkit-outer-spin-button,
+.qty-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.qty-input:focus { outline: none; }
+
+
+/* Add to Cart button — match theme (black, orange on hover) */
+#button-cart {
+  background-color: var(--sk-ink);
+  background-image: none;
+  border-color: var(--sk-ink);
+  text-shadow: none;
+  transition: background-color 0.15s ease;
+}
+#button-cart:hover,
+#button-cart:active,
+#button-cart:focus {
+  background-color: var(--sk-blaze);
+  background-position: 0 0;
+  border-color: var(--sk-blaze);
+}
+
+
+/* Wishlist & compare icon buttons — match theme (black, orange on hover) */
+#button-wishlist,
+#button-compare {
+  background-color: var(--sk-ink);
+  background-image: none;
+  border-color: var(--sk-ink);
+  color: var(--sk-white);
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+#button-wishlist:hover,
+#button-compare:hover,
+#button-wishlist:focus,
+#button-compare:focus {
+  background-color: var(--sk-blaze);
+  border-color: var(--sk-blaze);
+  color: var(--sk-white);
+}
+
+
+/* Comparison page — Add to Cart & Remove buttons */
+.table-bordered .btn-primary.btn-block {
+  background-color: var(--sk-ink);
+  background-image: none;
+  border-color: var(--sk-ink);
+  text-shadow: none;
+  transition: background-color 0.15s ease;
+}
+.table-bordered .btn-primary.btn-block:hover,
+.table-bordered .btn-primary.btn-block:focus,
+.table-bordered .btn-primary.btn-block:active {
+  background-color: var(--sk-blaze);
+  border-color: var(--sk-blaze);
+}
+.table-bordered .btn-danger.btn-block {
+  background-color: var(--sk-sale);
+  background-image: none;
+  border-color: var(--sk-sale);
+  text-shadow: none;
+  transition: filter 0.15s ease;
+}
+.table-bordered .btn-danger.btn-block:hover,
+.table-bordered .btn-danger.btn-block:focus,
+.table-bordered .btn-danger.btn-block:active {
+  background-color: var(--sk-sale);
+  border-color: var(--sk-sale);
+  filter: brightness(0.88);
+}
+
+/* Generic primary buttons — Continue, Login, Checkout, Submit, etc. —
+   match theme accent color (was stock OpenCart blue) */
+.btn-primary {
+  background-color: var(--sk-blaze);
+  background-image: none;
+  border-color: var(--sk-blaze-dark);
+  text-shadow: none;
+  transition: background-color 0.15s ease;
+}
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active,
+.btn-primary.disabled,
+.btn-primary[disabled] {
+  background-color: var(--sk-blaze-dark);
+  background-image: none;
+  background-position: 0 0;
+  border-color: var(--sk-blaze-dark);
+}
+
+/* Account sidebar list (My Account, Edit Account, Password... Logout) —
+   same links as the header account dropdown, rendered as a list-group here */
+.list-group a:hover,
+.list-group a.active,
+.list-group a.active:hover {
+  color: #fff;
+  background: var(--sk-blaze);
+  border-color: var(--sk-blaze);
+  text-shadow: none;
+}
+
+/* Radio & checkbox inputs (payment method, newsletter subscribe, etc.) —
+   browser default is blue; match theme accent color instead */
+input[type="radio"],
+input[type="checkbox"] {
+  accent-color: var(--sk-blaze);
+}
+
+/* Generic danger buttons — Delete, Remove, etc. —
+   match the same red + transition already used for Remove on the
+   comparison page (was stock Bootstrap red gradient) */
+.btn-danger {
+  background-color: var(--sk-sale);
+  background-image: none;
+  border-color: var(--sk-sale);
+  text-shadow: none;
+  transition: filter 0.15s ease;
+}
+.btn-danger:hover,
+.btn-danger:focus,
+.btn-danger:active,
+.btn-danger.active,
+.btn-danger.disabled,
+.btn-danger[disabled] {
+  background-color: var(--sk-sale);
+  border-color: var(--sk-sale);
+  box-shadow: none;
+  filter: brightness(0.88);
+}
+
+/* Generic info buttons — Edit, View (order/return/recurring), map link —
+   match theme (black, orange on hover), same pattern as Add to Cart */
+.btn-info {
+  background-color: var(--sk-ink);
+  background-image: none;
+  border-color: var(--sk-ink);
+  text-shadow: none;
+  transition: background-color 0.15s ease;
+}
+.btn-info:hover,
+.btn-info:focus,
+.btn-info:active,
+.btn-info.active,
+.btn-info.disabled,
+.btn-info[disabled] {
+  background-color: var(--sk-blaze);
+  background-image: none;
+  border-color: var(--sk-blaze);
+}
